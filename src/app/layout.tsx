@@ -1,8 +1,14 @@
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import NavBar from '@/components/navbar';
-import { Inter } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'] });
+
+export const metadata: Metadata = {
+  title: 'W ons',
+  description: 'Roblox, Fortnite',
+};
 
 export default function RootLayout({
   children,
@@ -11,11 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} `}>
+      <body className={`${inter.className} antialiased`}>
         <NavBar />
-        <main className="px-4 flex flex-col gap-4 min-h-screen">
-          {children}
-        </main>
+        <main className="px-4">{children}</main>
       </body>
     </html>
   );
