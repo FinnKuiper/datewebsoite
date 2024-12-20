@@ -1,5 +1,8 @@
 import './globals.css';
 import NavBar from '@/components/navbar';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({
   children,
@@ -8,9 +11,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={``}>
+      <body className={`${inter.className} `}>
         <NavBar />
-        <main className="px-4">{children}</main>
+        <main className="px-4 flex flex-col gap-4 min-h-screen">
+          {children}
+        </main>
       </body>
     </html>
   );
