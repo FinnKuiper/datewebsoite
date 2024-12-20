@@ -3,8 +3,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from '@/components/ui/carousel';
 import { TypographyH1 } from '@/typography/TypographyH1';
 import { TypographyH2 } from '@/typography/TypographyH2';
