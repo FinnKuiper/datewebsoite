@@ -1,40 +1,30 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  Carousel,
-  CarouselApi,
-  CarouselContent,
-  CarouselItem,
-} from '@/components/ui/carousel';
 import { TypographyH1 } from '@/typography/TypographyH1';
 import { TypographyH2 } from '@/typography/TypographyH2';
 import { TypographyP } from '@/typography/TypographyP';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import DateCarousel from '@/components/home/dateCarousel';
+import directus from '@/lib/directus';
+import { readItems } from '@directus/sdk';
 
-export default function Home() {
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-  const [count, setCount] = useState(0);
+interface Date {
+  id: string;
+  date_name: string;
+  date_description: string;
+  cover_image: string;
+}
 
-  useEffect(() => {
-    if (!api) return;
+async function getDates(): Promise<Date[]> {
+  const response = await directus.request(readItems('date'));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return response.map((item: Record<string, any>) => ({
+    id: item.id,
+    date_name: item.date_name,
+    date_description: item.date_description,
+    cover_image: item.cover_image,
+  }));
+}
 
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
-
-    api.on('select', () => {
-      setCurrent(api.selectedScrollSnap() + 1);
-    });
-  }, [api]);
+export default async function Home() {
+  const dates = await getDates();
   return (
     <>
       <header>
@@ -48,40 +38,7 @@ export default function Home() {
             &quot;deze gaan echt hard 💯💯&quot; - iedereen
           </TypographyP>
         </div>
-
-        <div className="flex flex-col items-center justify-center">
-          <Carousel setApi={setApi} className="w-full flex flex-row max-w-xs">
-            <CarouselContent>
-              {Array.from({ length: 5 }).map((_, index) => (
-                <CarouselItem key={index}>
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Dino Date</CardTitle>
-                      <CardDescription>Gaat echt fk hard</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <Image
-                        src="/dino-date.jpeg"
-                        alt="Dino Date"
-                        className="rounded-lg"
-                        width={300}
-                        height={200}
-                      />
-                    </CardContent>
-                    <CardFooter>
-                      <Button className="w-full">Checken</Button>
-                    </CardFooter>
-                  </Card>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-          <div>
-            <TypographyP>
-              {current} / {count}
-            </TypographyP>
-          </div>
-        </div>
+        <DateCarousel dates={dates} />
       </div>
     </>
   );
