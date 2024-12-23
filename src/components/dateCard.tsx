@@ -31,7 +31,7 @@ export default function DateCard({
           alt={name}
           width={300}
           height={300}
-          className="rounded-lg"
+          className="rounded-lg h-48"
         />
       </CardContent>
       <CardFooter>
